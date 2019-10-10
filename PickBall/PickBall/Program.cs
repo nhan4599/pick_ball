@@ -6,23 +6,23 @@ namespace PickBall
     {
         static void Main(string[] args)
         {
-            int[] group = new int[] { 3, 4, 6 };
+            int[] groups = new int[] { 3, 4, 6 };
             while (true)
             {
-                HumanMove(group);
-                if (Has0Group(group))
+                HumanMove(groups);
+                if (Has0Group(groups))
                 {
                     Console.WriteLine("You lose!!");
                     break;
                 }
-                PrintGame(group);
-                ComputerMove(group);
-                if (Has0Group(group))
+                PrintGame(groups);
+                ComputerMove(groups);
+                if (Has0Group(groups))
                 {
                     Console.WriteLine("You won!!");
                     break;
                 }
-                PrintGame(group);
+                PrintGame(groups);
             }
         }
 
@@ -101,7 +101,7 @@ namespace PickBall
         }
 
         // Get all group excepts the group has been expired
-        static void Get2Group(int[] group, out int a, int b)
+        static void Get2Group(int[] group, out int a, out int b)
         {
             a = -1;
             b = -1;
@@ -122,32 +122,32 @@ namespace PickBall
             }
         }
 
-        static void HumanMove(int[] group)
+        static void HumanMove(int[] groups)
         {
             Console.Write("Which group do you choose : ");
-            int g = int.Parse(Console.ReadLine());
+            int group = int.Parse(Console.ReadLine());
             Console.Write("How many balls do you pick : ");
             int n = int.Parse(Console.ReadLine());
-            PickBall(group, g, n);
+            PickBall(groups, group, n);
         }
 
-        static void ComputerMove(int[] group)
+        static void ComputerMove(int[] groups)
         {
-            if (Has1Group(group))
+            if (Has1Group(groups))
             {
-                int g;
-                Get1Group(group, out g);
-                if (group[g] > 1)
+                int group;
+                Get1Group(groups, out group);
+                if (groups[group] > 1)
                 {
-                    int n = group[g] - 1;
-                    PickBall(group, g, n);
-                    Console.WriteLine("Computer has picked {0} balls from group {1}", n, g);
+                    int n = groups[group] - 1;
+                    PickBall(groups, group, n);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", n, group);
                 }else
                 {
-                    PickBall(group, g, 1);
-                    Console.WriteLine("Computer has picked 1 balls from group {0}", g);
+                    PickBall(groups, group, 1);
+                    Console.WriteLine("Computer has picked 1 balls from group {0}", group);
                 }
-            }else if (Has2Group(group))
+            }else if (Has2Group(groups))
             {
 
             }
