@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PickBall
 {
@@ -17,6 +13,13 @@ namespace PickBall
                 if (Has0Group(group))
                 {
                     Console.WriteLine("You lose!!");
+                    break;
+                }
+                PrintGame(group);
+                ComputerMove(group);
+                if (Has0Group(group))
+                {
+                    Console.WriteLine("You won!!");
                     break;
                 }
                 PrintGame(group);
@@ -43,26 +46,31 @@ namespace PickBall
             group[g] -= n;
         }
 
+        // Define 0 group remaining
         static bool Has0Group(int[] group)
         {
             return CountGroup(group) == 0;
         }
 
+        // Define 1 group remaining
         static bool Has1Group(int[] group)
         {
             return CountGroup(group) == 1;
         }
 
+        // Define 2 group remaining
         static bool Has2Group(int[] group)
         {
             return CountGroup(group) == 2;
         }
 
+        // Define 3 group remaining
         static bool Has3Group(int[] group)
         {
             return CountGroup(group) == 3;
         }
         
+        // Count how many group which is remaining
         static int CountGroup(int[] group)
         {
             int count = 0;
@@ -73,6 +81,7 @@ namespace PickBall
             return count;
         }
 
+        // Get group which is remaining
         static void Get1Group(int[] group, out int i)
         {
             i = -1;
@@ -91,6 +100,7 @@ namespace PickBall
             }
         }
 
+        // Get all group excepts the group has been expired
         static void Get2Group(int[] group, out int a, int b)
         {
             a = -1;
@@ -127,6 +137,19 @@ namespace PickBall
             {
                 int g;
                 Get1Group(group, out g);
+                if (group[g] > 1)
+                {
+                    int n = group[g] - 1;
+                    PickBall(group, g, n);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", n, g);
+                }else
+                {
+                    PickBall(group, g, 1);
+                    Console.WriteLine("Computer has picked 1 balls from group {0}", g);
+                }
+            }else if (Has2Group(group))
+            {
+
             }
         }
     }
