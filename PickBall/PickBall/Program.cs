@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace PickBallGame
 {
@@ -7,21 +8,29 @@ namespace PickBallGame
         static void Main(string[] args)
         {
             int[] groups = new int[] { 3, 4, 6 };
+            PrintGame(groups);
             while (true)
             {
-                HumanMove(groups);
-                if (Has0Group(groups))
+                try
                 {
-                    Console.WriteLine("You lose!!");
-                    break;
+                    HumanMove(groups);
+                    if (Has0Group(groups))
+                    {
+                        Console.WriteLine("You lose!!");
+                        break;
+                    }
+                    PrintGame(groups);
+                    ComputerMove(groups);
+                    PrintGame(groups);
+                    if (Has0Group(groups))
+                    {
+                        Console.WriteLine("You won!!");
+                        break;
+                    }
                 }
-                PrintGame(groups);
-                ComputerMove(groups);
-                PrintGame(groups);
-                if (Has0Group(groups))
+                catch (Exception)
                 {
-                    Console.WriteLine("You won!!");
-                    break;
+                    Console.WriteLine("An error has been occurred, please input a valid number");
                 }
             }
         }
@@ -125,15 +134,24 @@ namespace PickBallGame
         {
             Console.WriteLine("Your turn");
             Console.Write("Which group do you choose : ");
-            int group = int.Parse(Console.ReadLine());
+            int group;
+            bool isValidGroup;
+            isValidGroup = int.TryParse(Console.ReadLine(), out group);
             Console.Write("How many balls do you pick : ");
-            int n = int.Parse(Console.ReadLine());
-            PickBall(groups, group, n);
+            int n;
+            bool isValidN;
+            isValidN = int.TryParse(Console.ReadLine(), out n);
+            if (n > groups[group] || n <= 0 || !isValidGroup || !isValidN)
+            {
+                throw new Exception();
+            }
+            PickBall(groups, group - 1, n);
         }
 
         static void ComputerMove(int[] groups)
         {
             Console.WriteLine("Computer is thinking...");
+            Thread.Sleep(1000);
             if (Has1Group(groups))
             {
                 int group;
@@ -174,7 +192,73 @@ namespace PickBallGame
                 }
             }else if (Has3Group(groups))
             {
-
+                if ((groups[0] == 1 && groups[1] == 2 && groups[2] > 3) || (groups[0] == 2 && groups[1] == 1 && groups[2] > 3))
+                {
+                    int ball = groups[2] - 3;
+                    PickBall(groups, 2, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 3);
+                }
+                else if ((groups[1] == 1 && groups[1] > 3 && groups[2] == 2) || (groups[0] == 2 && groups[1] > 3 && groups[2] == 1))
+                {
+                    int ball = groups[1] - 3;
+                    PickBall(groups, 1, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 2);
+                }
+                else if (groups[0] == 1 && groups[1] == 1 && groups[2] > 1)
+                {
+                    int ball = groups[2] - 1;
+                    PickBall(groups, 2, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 3);
+                }
+                else if (groups[0] == 1 && groups[1] > 1 && groups[2] == 1)
+                {
+                    int ball = groups[1] - 1;
+                    PickBall(groups, 1, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 2);
+                }
+                else if (groups[0] > 1 && groups[1] == 1 && groups[2] == 1)
+                {
+                    int ball = groups[0] - 1;
+                    PickBall(groups, 0, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 1);
+                }
+                else if ((groups[0] == 2 && groups[1] == 3 && groups[2] > 4) || (groups[0] == 3 && groups[1] == 2 && groups[2] > 4))
+                {
+                    int ball = groups[2] - 4;
+                    PickBall(groups, 2, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 3);
+                }
+                else if ((groups[0] > 2 && groups[1] == 3 && groups[2] == 4) || (groups[0] > 2 && groups[1] == 4 && groups[2] == 3))
+                {
+                    PickBall(groups, 0, 1);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", 1, 1);
+                }
+                else if (groups[0] == 2 && groups[1] > 3 && groups[2] == 4)
+                {
+                    int ball = groups[1] - 3;
+                    PickBall(groups, 1, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 2);
+                }
+                else if (groups[0] == 3 && groups[1] > 2 && groups[2] == 4)
+                {
+                    int ball = groups[1] - 2;
+                    PickBall(groups, 1, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 2);
+                }
+                else if (groups[0] == 3 && groups[1] == 4 && groups[2] > 2)
+                {
+                    int ball = groups[2] - 2;
+                    PickBall(groups, 2, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 3);
+                }
+                else
+                {
+                    Random rd = new Random();
+                    int group = rd.Next(0, 3);
+                    int ball = rd.Next(1, groups[group] + 1);
+                    PickBall(groups, group, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, group + 1);
+                }
             }
         }
     }
