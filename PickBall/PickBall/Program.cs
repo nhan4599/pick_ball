@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PickBall
+namespace PickBallGame
 {
     class Program
     {
@@ -17,22 +17,22 @@ namespace PickBall
                 }
                 PrintGame(groups);
                 ComputerMove(groups);
+                PrintGame(groups);
                 if (Has0Group(groups))
                 {
                     Console.WriteLine("You won!!");
                     break;
                 }
-                PrintGame(groups);
             }
         }
 
         // Print ball in all group
-        static void PrintGame(int[] group)
+        static void PrintGame(int[] groups)
         {
-            for (int i = 0; i < group.Length; i++)
+            for (int i = 0; i < groups.Length; i++)
             {
                 Console.Write("Group{0} : ", i + 1);
-                for (int j = 0; j < group[i]; j++)
+                for (int j = 0; j < groups[i]; j++)
                 {
                     Console.Write("o ");
                 }
@@ -41,9 +41,9 @@ namespace PickBall
         }
 
         // Pick ball from group
-        static void PickBall(int[] group, int g, int n)
+        static void PickBall(int[] groups, int group, int n)
         {
-            group[g] -= n;
+            groups[group] -= n;
         }
 
         // Define 0 group remaining
@@ -96,34 +96,34 @@ namespace PickBall
             else if (group[1] == 0 && group[2] == 0)
             {
                 i = 0;
-                return;
             }
         }
 
         // Get all group excepts the group has been expired
-        static void Get2Group(int[] group, out int a, out int b)
+        static void Get2Group(int[] groups, out int group1, out int group2)
         {
-            a = -1;
-            b = -1;
-            if (group[0] == 0)
+            group1 = -1;
+            group2 = -1;
+            if (groups[0] == 0)
             {
-                a = 1;
-                b = 2;
+                group1 = 1;
+                group2 = 2;
             }
-            else if (group[1] == 0)
+            else if (groups[1] == 0)
             {
-                a = 0;
-                b = 2;
+                group1 = 0;
+                group2 = 2;
             }
-            else if (group[2] == 0)
+            else if (groups[2] == 0)
             {
-                a = 0;
-                b = 1;
+                group1 = 0;
+                group2 = 1;
             }
         }
 
         static void HumanMove(int[] groups)
         {
+            Console.WriteLine("Your turn");
             Console.Write("Which group do you choose : ");
             int group = int.Parse(Console.ReadLine());
             Console.Write("How many balls do you pick : ");
@@ -133,21 +133,46 @@ namespace PickBall
 
         static void ComputerMove(int[] groups)
         {
+            Console.WriteLine("Computer is thinking...");
             if (Has1Group(groups))
             {
                 int group;
                 Get1Group(groups, out group);
                 if (groups[group] > 1)
                 {
-                    int n = groups[group] - 1;
-                    PickBall(groups, group, n);
-                    Console.WriteLine("Computer has picked {0} balls from group {1}", n, group);
+                    int ball = groups[group] - 1;
+                    PickBall(groups, group, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, group + 1);
                 }else
                 {
                     PickBall(groups, group, 1);
-                    Console.WriteLine("Computer has picked 1 balls from group {0}", group);
+                    Console.WriteLine("Computer has picked 1 ball from group {0}", group + 1);
                 }
             }else if (Has2Group(groups))
+            {
+                int group1, group2;
+                Get2Group(groups, out group1, out group2);
+                if (groups[group1] != groups[group2])
+                {
+                    if (groups[group1] > groups[group2])
+                    {
+                        int ball = groups[group1] - groups[group2];
+                        PickBall(groups, group1, ball);
+                        Console.WriteLine("Computer has pciked {0} balls from group {1}", ball, group1 + 1);
+                    }
+                    else if (groups[group1] < groups[group2])
+                    {
+                        int ball = groups[group2] - groups[group1];
+                        PickBall(groups, group2, ball);
+                        Console.WriteLine("Computer has picked {0} balls from group {1}", ball, group2 + 1);
+                    }
+                }else
+                {
+                    int ball = groups[group1];
+                    PickBall(groups, group1, groups[group1]);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, group1 + 1);
+                }
+            }else if (Has3Group(groups))
             {
 
             }
