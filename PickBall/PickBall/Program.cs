@@ -9,6 +9,8 @@ namespace PickBallGame
         {
             int[] groups = new int[] { 3, 4, 6 };
             PrintGame(groups);
+            Console.WriteLine("Do you want to go first?? (Y or N) : ");
+            bool move = Console.ReadLine().ToUpper() == "Y";
             while (true)
             {
                 try
@@ -170,7 +172,22 @@ namespace PickBallGame
                 Get2Group(groups, out group1, out group2);
                 if (groups[group1] != groups[group2])
                 {
-                    if (groups[group1] > groups[group2])
+                    if (groups[group1] == 1 || groups[group2] == 1)
+                    {
+                        if (groups[group1] == 1)
+                        {
+                            int ball = groups[group2];
+                            PickBall(groups, group2, ball);
+                            Console.WriteLine("Computer has pciked {0} balls from group {1}", ball, group2 + 1);
+                        }
+                        else
+                        {
+                            int ball = groups[group1];
+                            PickBall(groups, group1, ball);
+                            Console.WriteLine("Computer has pciked {0} balls from group {1}", ball, group1 + 1);
+                        }
+                    }
+                    else if (groups[group1] > groups[group2])
                     {
                         int ball = groups[group1] - groups[group2];
                         PickBall(groups, group1, ball);
