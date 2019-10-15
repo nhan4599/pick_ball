@@ -9,6 +9,8 @@ namespace PickBallGame
         {
             int[] groups = new int[] { 3, 4, 6 };
             PrintGame(groups);
+            Console.WriteLine("Do you want to go first?? (Y or N) : ");
+            string move = Console.ReadLine().ToUpper();
             while (true)
             {
                 try
