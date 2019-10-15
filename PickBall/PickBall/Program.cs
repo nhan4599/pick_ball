@@ -16,7 +16,7 @@ namespace PickBallGame
                     HumanMove(groups);
                     if (Has0Group(groups))
                     {
-                        Console.WriteLine("You lose!!");
+                        Console.WriteLine("You lost!!");
                         break;
                     }
                     PrintGame(groups);
