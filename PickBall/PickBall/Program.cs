@@ -9,8 +9,6 @@ namespace PickBallGame
         {
             int[] groups = new int[] { 3, 4, 6 };
             PrintGame(groups);
-            Console.WriteLine("Do you want to go first?? (Y or N) : ");
-            bool move = Console.ReadLine().ToUpper() == "Y";
             while (true)
             {
                 try
@@ -151,7 +149,7 @@ namespace PickBallGame
         static void ComputerMove(int[] groups)
         {
             Console.WriteLine("Computer is thinking...");
-            Thread.Sleep(1000);
+            Thread.Sleep(new Random().Next(500, 1750));
             if (Has1Group(groups))
             {
                 int group;
