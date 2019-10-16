@@ -5,10 +5,13 @@ namespace PickBallGame
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
+            // initialize groups ball
             int[] groups = new int[] { 3, 4, 6 };
             PrintGame(groups);
+
+            // loop main game
             while (true)
             {
                 try
@@ -35,7 +38,7 @@ namespace PickBallGame
             }
         }
 
-        // Print ball in all group
+        // Print balls in all group
         static void PrintGame(int[] groups)
         {
             for (int i = 0; i < groups.Length; i++)
@@ -49,37 +52,37 @@ namespace PickBallGame
             }
         }
 
-        // Pick ball from group
+        // Picks ball from group
         static void PickBall(int[] groups, int group, int n)
         {
             groups[group] -= n;
         }
 
-        // Define 0 group remaining
+        // Determines 0 group remaining
         static bool Has0Group(int[] group)
         {
             return CountGroup(group) == 0;
         }
 
-        // Define 1 group remaining
+        // Determines 1 group remaining
         static bool Has1Group(int[] group)
         {
             return CountGroup(group) == 1;
         }
 
-        // Define 2 group remaining
+        // Determines 2 group remaining
         static bool Has2Group(int[] group)
         {
             return CountGroup(group) == 2;
         }
 
-        // Define 3 group remaining
+        // Determines 3 group remaining
         static bool Has3Group(int[] group)
         {
             return CountGroup(group) == 3;
         }
         
-        // Count how many group which is remaining
+        // Counts how many groups which is remaining
         static int CountGroup(int[] group)
         {
             int count = 0;
@@ -90,7 +93,7 @@ namespace PickBallGame
             return count;
         }
 
-        // Get group which is remaining
+        // Gets 1 group which is remaining
         static void Get1Group(int[] group, out int i)
         {
             i = -1;
@@ -108,7 +111,7 @@ namespace PickBallGame
             }
         }
 
-        // Get all group excepts the group has been expired
+        // Gets all group excepts the group has been expired
         static void Get2Group(int[] groups, out int group1, out int group2)
         {
             group1 = -1;
@@ -134,11 +137,9 @@ namespace PickBallGame
         {
             Console.WriteLine("Your turn");
             Console.Write("Which group do you choose : ");
-            int group;
-            bool isValidGroup = int.TryParse(Console.ReadLine(), out group);
+            bool isValidGroup = int.TryParse(Console.ReadLine(), out int group);
             Console.Write("How many balls do you pick : ");
-            int n;
-            bool isValidN = int.TryParse(Console.ReadLine(), out n);
+            bool isValidN = int.TryParse(Console.ReadLine(), out int n);
             if (n > groups[group - 1] || n <= 0 || !isValidGroup || !isValidN)
             {
                 throw new Exception();
@@ -149,7 +150,7 @@ namespace PickBallGame
         static void ComputerMove(int[] groups)
         {
             Console.WriteLine("Computer is thinking...");
-            Thread.Sleep(new Random().Next(500, 1750));
+            Thread.Sleep(new Random().Next(50, 750));
             if (Has1Group(groups))
             {
                 int group;
@@ -222,6 +223,12 @@ namespace PickBallGame
                     int ball = groups[1] - 2;
                     PickBall(groups, 1, ball);
                     Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 2);
+                }
+                else if ((groups[0] == 3 && groups[1] == 2 && groups[2] > 1) || (groups[0] == 2 && groups[1] == 3 && groups[2] > 1))
+                {
+                    int ball = groups[2] - 1;
+                    PickBall(groups, 1, ball);
+                    Console.WriteLine("Computer has picked {0} balls from group {1}", ball, 3);
                 }
                 else if (groups[0] == 1 && groups[1] == 1 && groups[2] > 1)
                 {
